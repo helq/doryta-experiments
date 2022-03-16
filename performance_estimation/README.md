@@ -32,8 +32,8 @@ To obtain the results here presented, execute the following commands:
 
     ```bash
     mpirun -np 1 <path-to-bin>/doryta --spike-driven \
-        --load-model=<doryta-root>/data/models/whetstone/ffsnn-mnist.doryta.bin \
-        --load-spikes=<doryta-root>/data/models/whetstone/spikified-mnist/spikified-images-all.bin \
+        --load-model=<doryta-root>/data/models/mnist/snn-models/ffsnn-mnist.doryta.bin \
+        --load-spikes=<doryta-root>/data/models/mnist/spikes/spikified-mnist/spikified-images-all.bin \
         --output-dir='ffsnn-all' \
         --probe-firing --probe-firing-buffer=5000000000 --probe-stats \
         --extramem=10000000 --end=10000
@@ -47,8 +47,8 @@ To obtain the results here presented, execute the following commands:
 
     ```bash
     python <doryta-root>/tools/whetstone-mnist/check_doryta_inference.py \
-        --path-to-keras-model <doryta-root>/data/models/whetstone/keras-ffsnn-mnist \
-        --path-to-tags <doryta-root>/data/models/whetstone/spikified-mnist/spikified-images-all.tags.bin \
+        --path-to-keras-model <doryta-root>/data/models/mnist/raw_keras_models/ffsnn-mnist \
+        --path-to-tags <doryta-root>/data/models/mnist/spikes/spikified-mnist/spikified-images-all.tags.bin \
         --indices-in-output 10000 \
         --outdir-doryta <path-to-output>/ffsnn-all \
         --dataset fashion-mnist --model-type lenet
