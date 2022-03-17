@@ -15,7 +15,8 @@ for file in gol-random/gol-random/*.bin; do
     --probe-stats --end=100.5 #--probe-firing --probe-firing-buffer=40000
 done
 
+mkdir -p gol-random/aggregated
 python "$TOOLS_DIR"/general/aggregate_stats.py --path 'gol-random/output/gol-random-*' \
-  --save gol-random/
+  --save gol-random/aggregated
 python "$TOOLS_DIR"/general/total_stats.py --path gol-random --groups '[400,400]' \
-  --iterations $((200 * 1000)) --csv 'gol-random/gol_100_iters_on_1000_random'
+  --iterations $((200 * 1000)) --csv 'gol-random/aggregated'
