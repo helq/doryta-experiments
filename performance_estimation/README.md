@@ -14,10 +14,21 @@ To obtain the results here presented, execute the following commands:
 
 1. (optional) Train the SNN model using Keras and Whetstone:
 
+    Depending on the model, you might have to modify the code directly (and switch on/off
+    some variables) or just pass the necessary parameters to the script. The
+    inconsistencies arised from the fact that this is experimental code. Only some scripts
+    have been modified to receive parameters from the user as to make the process of
+    replicating the results from the paper. It should not be difficult to flip the
+    necessary switches to train/load or save the models. Thank you for reading though `<3`
+
     ```bash
-    # Edit file <doryta-root>/data/models/whetstone/code/ffsnn_minst.py
+    # Edit file <doryta-root>/data/models/code/ffsnn_mnist.py for Fully connected network
     cd <doryta-root>/data/models
     python -m code.ffsnn_minst
+    # Or run LeNet with one of many parameters
+    python -m code.lenet_mnist --help
+    python -m code.lenet_mnist
+    python -m code.lenet_mnist --train --save --fashion --large-lenet
     ```
 
     If the right switches are selected within `ffsnn_mnist.py`, a SNN trained in MNIST
@@ -25,9 +36,9 @@ To obtain the results here presented, execute the following commands:
     `<doryta-root>/data/models/mnist/snn-models/`. This file is readable by Doryta as a
     model.
 
-    Additionally, activating one of the `if` statements will save the MNIST dataset a set
-    of spikes that can be read by Doryta. They will stored in the folder called
-    `<doryta-root>/data/models/mnist/spikes/spikified-mnist/`.
+    Additionally, if the switch `saving_model` is turned on, the MNIST dataset will be
+    saved as a set of spikes that can be read by Doryta. They will stored in a subfolder
+    called `<doryta-root>/data/models/mnist/spikes/spikified-mnist/`.
 
 2. Run the SNN model in Doryta and tell Doryta to store the stats:
 
@@ -36,7 +47,7 @@ To obtain the results here presented, execute the following commands:
         --load-model=<doryta-root>/data/models/mnist/snn-models/ffsnn-mnist.doryta.bin \
         --load-spikes=<doryta-root>/data/models/mnist/spikes/spikified-mnist/spikified-images-all.bin \
         --output-dir='ffsnn-all' \
-        --probe-firing --probe-firing-buffer=5000000000 --probe-stats \
+        --probe-firing --probe-firing-buffer=100000 --probe-stats \
         --extramem=10000000 --end=10000
     ```
 

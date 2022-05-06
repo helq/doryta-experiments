@@ -1,7 +1,5 @@
 #!/usr/bin/bash -x
 
-# to run: sbatch -N 32 --ntasks-per-node=40 --gres=gpu:6 -t 30 -D /gpfs/u/home/SPNR/SPNRcrzc/scratch/doryta-experiments/gol-experiments-huge /gpfs/u/home/SPNR/SPNRcrzc/barn/doryta/build/gol-experiments-huge/large-gol-10000^2-32-nodes.sh
-
 # setting up SLURM
 if [ "x$SLURM_NPROCS" = "x" ]
 then
@@ -31,25 +29,10 @@ module load xl_r spectrum-mpi/10.4
 # variables and pre-loading everything
 DORYTA_BIN=/gpfs/u/home/SPNR/SPNRcrzc/barn/doryta/build/src/doryta
 
-## running code
-np=$SLURM_NPROCS
-grid_width=10000
-
-outdir=gol-$grid_width-random-spike-np=$np
-mkdir -p $outdir
-
-mpirun --bind-to core -hostfile /tmp/hosts.$SLURM_JOB_ID -np $np \
-    "$DORYTA_BIN" --synch=2 --spike-driven \
-        --gol-model --gol-model-size=$grid_width --end=1000.2 \
-        --random-spikes-time=0.6 \
-        --random-spikes-uplimit=$((grid_width * grid_width)) \
-        --output-dir=$outdir --extramem=10000000 # > $outdir/model-result.txt
-
-# Running small example on an increasing amount of nodes
+# second part
 grid_width=1000
 
-for i in {1..32}; do
-    np=$((i * 40))
+for np in {1,2,4,8,16,32,40}; do
     outdir=gol-$grid_width-random-spike-np=$np
     mkdir -p $outdir
     
