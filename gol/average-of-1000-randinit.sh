@@ -6,7 +6,7 @@ TOOLS_DIR="$ROOT_DORYTA"/tools
 
 mkdir -p gol-random/output
 
-tar -xf $MODELS_DIR/gol-spikes/20x20/gol-random.tar.xz -C gol-random
+tar -xf $MODELS_DIR/gol/spikes/20x20/gol-random.tar.xz -C gol-random
 
 for file in gol-random/gol-random/*.bin; do
   plain_name=${file%.bin}

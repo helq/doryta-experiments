@@ -16,17 +16,18 @@ To obtain the results here presented, execute the following commands:
 
     ```bash
     # Edit file <doryta-root>/data/models/whetstone/code/ffsnn_minst.py
-    cd <doryta-root>/data/models/whetstone/
+    cd <doryta-root>/data/models
     python -m code.ffsnn_minst
     ```
 
     If the right switches are selected within `ffsnn_mnist.py`, a SNN trained in MNIST
-    should be generated as a `.doryta.bin` file. This file is readable by Doryta as a
+    should be generated as a `.doryta.bin` file under the directory
+    `<doryta-root>/data/models/mnist/snn-models/`. This file is readable by Doryta as a
     model.
 
-    Additionally, if the switch `saving_model` is turned on, the MNIST dataset will be
-    saved as a set of spikes that can be read by Doryta. They will stored in a subfolder
-    called `spikified-mnist`.
+    Additionally, activating one of the `if` statements will save the MNIST dataset a set
+    of spikes that can be read by Doryta. They will stored in the folder called
+    `<doryta-root>/data/models/mnist/spikes/spikified-mnist/`.
 
 2. Run the SNN model in Doryta and tell Doryta to store the stats:
 
