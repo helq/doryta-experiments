@@ -37,11 +37,13 @@ for np in {1,2,4,8,16,32,40}; do
     mkdir -p $outdir
     
     # running code
-    mpirun --bind-to core -hostfile /tmp/hosts.$SLURM_JOB_ID -np $np \
+    mpirun --bind-to core -np $np \
         "$DORYTA_BIN" --synch=2 --spike-driven \
+            --cons-lookahead=4.0 \
+            --gvt-interval=512 \
             --gol-model --gol-model-size=$grid_width \
-            --heartbeat=1 --end=2000.2 \
-            --random-spikes-time=0.6 \
+            --heartbeat=20 --end=40000.2 \
+            --random-spikes-time=5.0 \
             --random-spikes-uplimit=$((grid_width * grid_width)) \
             --output-dir=$outdir --extramem=$((40000000 / np)) > $outdir/model-result.txt
 done

@@ -36,25 +36,16 @@ for np in {2,4,8,16,32,40}; do
     outdir=gol-$grid_width-random-spike-np=$np
     mkdir -p $outdir
     
-    # optimistic
+    # running code
     mpirun --bind-to core -hostfile /tmp/hosts.$SLURM_JOB_ID -np $np \
         "$DORYTA_BIN" --synch=3 --spike-driven \
-            --max-opt-lookahead=1 \
+            --max-opt-lookahead=20 \
+            --gvt-interval=512 \
             --gol-model --gol-model-size=$grid_width \
-            --heartbeat=1 --end=2000.2 \
-            --random-spikes-time=0.6 \
+            --heartbeat=20 --end=40000.2 \
+            --random-spikes-time=5.0 \
             --random-spikes-uplimit=$((grid_width * grid_width)) \
             --output-dir=$outdir --extramem=$((40000000 / np)) > $outdir/model-result.txt
-
-    # optimistic realtime
-    # mpirun --bind-to core -hostfile /tmp/hosts.$SLURM_JOB_ID -np $np \
-    #     "$DORYTA_BIN" --synch=5 --spike-driven \
-    #         --max-opt-lookahead=1 \
-    #         --gvt-interval=1 --batch=4 \
-    #         --gol-model --gol-model-size=$grid_width --end=1000.2 \
-    #         --random-spikes-time=0.6 \
-    #         --random-spikes-uplimit=$((grid_width * grid_width)) \
-    #         --output-dir=$outdir --extramem=$((40000000 / np)) > $outdir/model-result.txt
 done
 
 # cleaning SLURM
