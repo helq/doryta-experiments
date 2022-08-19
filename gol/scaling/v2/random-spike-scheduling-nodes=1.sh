@@ -1,19 +1,17 @@
 #!/usr/bin/bash -x
+#SBATCH --nodes=1
+#SBATCH --gres=gpu:6
+#SBATCH -t 120
 
 # loading modules
 module load xl_r spectrum-mpi/10.4
 
-# checking some number of cpus parameters
-lscpu
-grep -c processor /proc/cpuinfo
-
 # variables and pre-loading everything
-DORYTA_BIN=/gpfs/u/home/SPNR/SPNRcrzc/barn/doryta/build/src/doryta
-
-# second part
+DORYTA_BIN="$1"
 grid_width=1024
 np=32
 
+# running code
 for levels in {1,3,7,15,31,63,127,255,511,1023}; do
     # conservative
     outdir=gol-$grid_width-random-spike-np=$np-levels=$levels-conservative

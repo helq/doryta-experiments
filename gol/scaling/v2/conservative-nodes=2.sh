@@ -1,15 +1,17 @@
 #!/usr/bin/bash -x
+#SBATCH --nodes=2
+#SBATCH --ntasks=64
+#SBATCH --gres=gpu:6
+#SBATCH -t 240
 
 # loading modules
 module load xl_r spectrum-mpi/10.4
 
 # variables and pre-loading everything
-DORYTA_BIN=/gpfs/u/home/SPNR/SPNRcrzc/barn/doryta/build/src/doryta
-
-# second part
-
+DORYTA_BIN="$1"
 np=64
 
+# running code
 for grid_width in {1024,2048,4096,8192}; do
   outdir=gol-$grid_width-random-spike-np=$np
   mkdir -p $outdir
