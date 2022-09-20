@@ -7,7 +7,7 @@
 module load xl_r spectrum-mpi/10.4
 
 # variables and pre-loading everything
-DORYTA_BIN="$1"
+DORYTA_BIN="$1.no-tiebreaker"
 grid_width=1024
 
 # running code
@@ -18,11 +18,10 @@ for np in {32,16,8,4,2,1}; do
     mpirun --bind-to core -np $np --report-bindings -vvv \
         "$DORYTA_BIN" --synch=3 --spike-driven \
             --max-opt-lookahead=10 \
-            --gvt-interval=512 \
-            --nkp=128 \
+            --gvt-interval=512 --batch=16 --nkp=8 \
             --gol-model --gol-model-size=$grid_width \
             --heartbeat=20 --end=40000.2 \
             --random-spikes-time=5.0 \
             --random-spikes-uplimit=$((grid_width * grid_width)) \
-            --output-dir=$outdir --extramem=$((40000000 / np)) > $outdir/model-result.txt
+            --output-dir=$outdir --extramem=$((6 * grid_width * grid_width / np)) > $outdir/model-result.txt
 done

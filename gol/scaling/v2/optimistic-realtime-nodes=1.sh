@@ -16,9 +16,9 @@ for np in {32,16,8,4,2,1}; do
     mkdir -p $outdir
 
     mpirun --bind-to core -np $np --report-bindings -vvv \
-        "$DORYTA_BIN" --synch=3 --spike-driven \
+        "$DORYTA_BIN" --synch=5 --spike-driven \
             --max-opt-lookahead=10 \
-            --gvt-interval=512 \
+            --gvt-interval=1 \
             --nkp=128 \
             --gol-model --gol-model-size=$grid_width \
             --heartbeat=20 --end=40000.2 \

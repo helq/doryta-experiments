@@ -9,17 +9,19 @@ module load xl_r spectrum-mpi/10.4
 # variables and pre-loading everything
 DORYTA_BIN="$1"
 grid_width=1024
+np=32
 
-# running code
-for np in {32,16,8,4,2,1}; do
-    outdir=gol-$grid_width-random-spike-np=$np
+#for kp in {1,2,4,8,16,32,64,128}; do
+for kp in {256,512,1024,2048,4096,8192,16384,32768}; do
+    outdir=gol-$grid_width-random-spike-np=$np-kps=$kp
     mkdir -p $outdir
-
-    mpirun --bind-to core -np $np --report-bindings -vvv \
+    
+    # running code
+    mpirun --bind-to core -np $np \
         "$DORYTA_BIN" --synch=3 --spike-driven \
+            --nkp=$kp \
             --max-opt-lookahead=10 \
             --gvt-interval=512 \
-            --nkp=128 \
             --gol-model --gol-model-size=$grid_width \
             --heartbeat=20 --end=40000.2 \
             --random-spikes-time=5.0 \
