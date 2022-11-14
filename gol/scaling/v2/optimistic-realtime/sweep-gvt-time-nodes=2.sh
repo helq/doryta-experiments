@@ -1,7 +1,8 @@
 #!/usr/bin/bash -x
-#SBATCH --nodes=1
+#SBATCH --nodes=2
+#SBATCH --ntasks=64
 #SBATCH --gres=gpu:6
-#SBATCH -t 240
+#SBATCH -t 120
 
 # loading modules
 module load xl_r spectrum-mpi/10.4
@@ -9,18 +10,16 @@ module load xl_r spectrum-mpi/10.4
 # variables and pre-loading everything
 DORYTA_BIN="$1"
 grid_width=1024
-np=32
+np=64
 
-for batch in {4,8,16,32,64,128,256,512,1024,2048}; do
-    outdir=gol-$grid_width-random-spike-np=$np-batch=$batch
+for gvt in {1,2,3,4,5,6,7,8}; do
+    outdir=gol-$grid_width-gvt=$gvt
     mkdir -p $outdir
-    
-    # running code
     mpirun --bind-to core -np $np \
-        "$DORYTA_BIN" --synch=3 --spike-driven \
-            --batch=$batch \
+        "$DORYTA_BIN" --synch=5 --spike-driven \
             --max-opt-lookahead=10 \
-            --gvt-interval=512 \
+            --gvt-interval=$gvt \
+            --nkp=32 --batch=64 \
             --gol-model --gol-model-size=$grid_width \
             --heartbeat=20 --end=40000.2 \
             --random-spikes-time=5.0 \

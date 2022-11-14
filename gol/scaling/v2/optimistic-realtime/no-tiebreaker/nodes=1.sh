@@ -7,7 +7,7 @@
 module load xl_r spectrum-mpi/10.4
 
 # variables and pre-loading everything
-DORYTA_BIN="$1"
+DORYTA_BIN="$1.no-tiebreaker"
 grid_width=1024
 
 # running code
@@ -19,7 +19,7 @@ for np in {32,16,8,4,2,1}; do
         "$DORYTA_BIN" --synch=5 --spike-driven \
             --max-opt-lookahead=10 \
             --gvt-interval=1 \
-            --nkp=128 \
+            --nkp=4 --batch=64 \
             --gol-model --gol-model-size=$grid_width \
             --heartbeat=20 --end=40000.2 \
             --random-spikes-time=5.0 \

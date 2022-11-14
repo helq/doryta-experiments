@@ -1,6 +1,5 @@
 #!/usr/bin/bash -x
-#SBATCH --nodes=16
-#SBATCH --ntasks=512
+#SBATCH --nodes=1
 #SBATCH --gres=gpu:6
 #SBATCH -t 240
 
@@ -9,30 +8,36 @@ module load xl_r spectrum-mpi/10.4
 
 # variables and pre-loading everything
 DORYTA_BIN="$1.no-tiebreaker"
-np=512
+grid_width=1024
+np=32
 
-for grid_width in {1024,2048,4096,8192}; do
-    outdir=conservative/gol-$grid_width-np=$np
+# running code
+for levels in {1,3,7,15,31,63,127,255,511,1023}; do
+    # conservative
+    outdir=gol-$grid_width-random-spike-np=$np-levels=$levels-conservative
     mkdir -p $outdir
     mpirun --bind-to core -np $np \
         "$DORYTA_BIN" --synch=2 --spike-driven \
-            --cons-lookahead=4.0 \
+            --spike-rand-sched=$levels \
+            --cons-lookahead=0.000001 \
             --gvt-interval=512 --batch=512 \
             --gol-model --gol-model-size=$grid_width \
-            --heartbeat=20 --end=40000.2 \
-            --random-spikes-time=5.0 \
+            --heartbeat=20 --end=40000.000001 \
+            --random-spikes-time=1.0 \
             --random-spikes-uplimit=$((grid_width * grid_width)) \
-            --output-dir=$outdir --extramem=$((40000 * grid_width / np)) > $outdir/model-result.txt
-
-    outdir=optimistic/gol-$grid_width-np=$np
+            --output-dir=$outdir --extramem=$((40000000 / np)) > $outdir/model-result.txt
+    
+    # optimistic
+    outdir=gol-$grid_width-random-spike-np=$np-levels=$levels-optimistic
     mkdir -p $outdir
     mpirun --bind-to core -np $np \
         "$DORYTA_BIN" --synch=3 --spike-driven \
+            --spike-rand-sched=$levels \
             --max-opt-lookahead=10 \
             --gvt-interval=1000000 --nkp=16 --batch=64 \
             --gol-model --gol-model-size=$grid_width \
-            --heartbeat=20 --end=40000.2 \
-            --random-spikes-time=5.0 \
+            --heartbeat=20 --end=40000.000001 \
+            --random-spikes-time=1.0 \
             --random-spikes-uplimit=$((grid_width * grid_width)) \
-            --output-dir=$outdir --extramem=$((10 * grid_width * grid_width / np)) > $outdir/model-result.txt
+            --output-dir=$outdir --extramem=$((40000000 / np)) > $outdir/model-result.txt
 done

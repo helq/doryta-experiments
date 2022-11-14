@@ -1,6 +1,5 @@
 #!/usr/bin/bash -x
-#SBATCH --nodes=4
-#SBATCH --ntasks=128
+#SBATCH --nodes=1
 #SBATCH --gres=gpu:6
 #SBATCH -t 240
 
@@ -9,7 +8,7 @@ module load xl_r spectrum-mpi/10.4
 
 # variables and pre-loading everything
 DORYTA_BIN="$1"
-np=128
+np=32
 
 for grid_width in {1024,2048,4096,8192}; do
     outdir=conservative/gol-$grid_width-random-spike-np=$np

@@ -33,9 +33,9 @@ for kp in {4,8,16,32,64,128,256,512,1024,2048}; do
     mkdir -p $outdir
     mpirun --bind-to core -np $np \
         "$DORYTA_BIN" --synch=3 --spike-driven \
-            --nkp=$kp \
+            --batch=$batch --nkp=$kp \
             --max-opt-lookahead=10 \
-            --gvt-interval=512 \
+            --gvt-interval=100000 \
             --gol-model --gol-model-size=$grid_width \
             --heartbeat=20 --end=40000.2 \
             --random-spikes-time=5.0 \
