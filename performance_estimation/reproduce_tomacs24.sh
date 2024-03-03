@@ -47,7 +47,7 @@ mpirun -np 1 src/doryta --spike-driven --synch=3 \
 
 # Step 4: Checking that Doryta's output/classification corresponds to keras/whetstone's
 # model. Additionally, accuracy is stored in memory
-rm "$dorytaroot"/tools/whetstone-mnist/ws_models
+rm -rf "$dorytaroot"/tools/whetstone-mnist/ws_models/code
 ln -s "$dorytaroot"/data/models/code "$dorytaroot"/tools/whetstone-mnist/ws_models
 
 python "$dorytaroot"/tools/whetstone-mnist/check_doryta_inference.py \
@@ -105,16 +105,16 @@ python "$dorytaroot"/tools/general/total_stats.py \
     --iterations 10000 --csv "$dorytaroot"/data/experiments/performance_estimation/large_lenet_fashion \
     --groups '[784,784,784,784,784,784,784,784,784,784,784,784,784,784,784,784,784,784,784,784,784,784,784,784,784,784,784,784,784,784,784,784,784,196,196,196,196,196,196,196,196,196,196,196,196,196,196,196,196,196,196,196,196,196,196,196,196,196,196,196,196,196,196,196,196,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,120,84]'
 
-# Bonus step: Saves info shown in Table 10
+# Bonus step: Saves info shown in Table 11
 cd "$dir_to_data"
 
-truncate -s 0 table10.csv # deleting/creating file
-echo "workload,integration,fire,accuracy" >> table10.csv
+truncate -s 0 table11.csv # deleting/creating file
+echo "workload,integration,fire,accuracy" >> table11.csv
 for f in {small_lenet,small_lenet_fashion,large_lenet,large_lenet_fashion}; do
     # saving workload name
-    printf "$f," >> table10.csv
+    printf "$f," >> table11.csv
     # saving integration and fire stats
-    awk -F, 'NR == 2 { printf "%s,%f,", $4, $5 }' $f-average.csv >> table10.csv
+    awk -F, 'NR == 2 { printf "%s,%f,", $4, $5 }' $f-average.csv >> table11.csv
     # saving accuracy stats
-    cat ${f}_accuracy.txt >> table10.csv
+    cat ${f}_accuracy.txt >> table11.csv
 done
