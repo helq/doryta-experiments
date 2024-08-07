@@ -7,6 +7,8 @@ home=/gpfs/u/home/SPNR/SPNRcrzc
 base_experiments_path="$home/scratch/doryta-experiments"
 path_to_doryta_bin="$home/barn/doryta/build/src/doryta"
 
+export DORYTA_MODELS="$home/barn/doryta/data/models"
+
 # Checking for validity of input
 if [ ! $# -eq 2 ]; then
   echo "This script requires TWO arguments: the relative directory to store all" \
